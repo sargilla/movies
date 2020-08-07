@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./src/bin/www -e js,ejs"
+    "start": "node ./src/bin/www"
   },
   "dependencies": {
     "axios": "^0.19.2",
