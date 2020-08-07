@@ -1,0 +1,33 @@
+<%- include("../header")  %>
+<p>Create Actor</p>
+<hr>
+<div class="col-md-8 mx-auto">
+    <form action="/actors" method="POST">
+        <div class="form-group">
+            <label for="first_name">First name</label>
+            <input type="text" class="form-control" name="first_name">
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="string" class="form-control" name="last_name">
+        </div>
+        <div class="form-group">
+            <label for="rating">rating</label>
+            <input type="number" step="0.01" class="form-control" name="rating">
+        </div>
+        <div class="form-group">
+            <label for="favorite_movie_id">Favorite Movie</label>
+            <select class="form-control" name="favorite_movie_id">
+                <option value="" disabled selected>Choose movie</option>
+                <% for (movie of movies) { %> 
+                <option value="<%= movie.id %> "><%= movie.title %> </option>
+                <% } %> 
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary text-right">Enviar</button>
+        </div>
+    </form>
+</div>
+
+<%- include("../footer")  %>

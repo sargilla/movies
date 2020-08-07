@@ -1,0 +1,14 @@
+<%- include("../header")  %>
+<p class="d-flex justify-content-between align-items-center">
+    <span>Actors</span> 
+    <a href="/actors/create" class="btn btn-sm btn-primary">Add actor</a>
+</p>
+
+<hr>
+<ul>
+<% for (actor of actors) {%>
+    <li><a href="/actors/<%= actor.id %> "><%= actor.first_name %> <%= actor.last_name %></a></li>
+<% } %>
+</ul>
+
+<%- include("../footer")  %>

@@ -1,0 +1,19 @@
+<%- include("../header")  %>
+<p><%= actor.first_name %> <%= actor.last_name %></p>
+<hr>
+<ul>
+    <li>Rating: <%= actor.rating %> </li>
+    <% if(actor.favorite) { %>
+    <li>Favorite Movie: <%= actor.favorite.title %> </li>
+    <% } %>
+    <li>Filmography: <%= actor.movies.map(movie => movie.title).join(' - ') %> </li>
+</ul>
+
+    <div class="d-flex justify-content-center mb-3">
+        <a href="/actors/<%= actor.id %>/edit" class="btn btn-primary">Edit</a>
+        <form action="/actors/<%= actor.id %>?_method=DELETE" method="POST">
+            <button type="submit" class="btn btn-danger ml-2">Delete</button>
+        </form>
+    </div>
+
+<%- include("../footer")  %>
