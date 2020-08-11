@@ -1,13 +1,18 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Actor = sequelize.define('Actors', {
-    first_name: DataTypes.STRING,
-    last_name: DataTypes.STRING,
-    favorite_movie_id: DataTypes.INTEGER,
-    rating: DataTypes.FLOAT
-  }, {
-    timestamps: false
-  });
+  const Actor = sequelize.define(
+    "Actors",
+    {
+      first_name: DataTypes.STRING,
+      last_name: DataTypes.STRING,
+      favorite_movie_id: DataTypes.INTEGER,
+      rating: DataTypes.FLOAT,
+    },
+    {
+      tableName: "actors",
+      timestamps: false,
+    }
+  );
   Actor.associate = function(models) {
     Actor.belongsTo(models.Movies,{
         as: 'favorite',
