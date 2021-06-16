@@ -5,7 +5,7 @@ module.exports = {
     "username": process.env.DB_USER,
     "password": process.env.DB_PASS,
     "database": process.env.DB_NAME,
-    "host": "127.0.0.1",
+    "host": process.env.DB_HOST,
     "port":process.env.DB_PORT,
     "dialect": "mysql",
     "operatorsAliases": 0
@@ -22,7 +22,7 @@ module.exports = {
     "username": process.env.DB_USER,
     "password": process.env.DB_PASS,
     "database": process.env.DB_NAME,
-    "host": "127.0.0.1",
+    "host": process.env.DB_HOST,
     "dialect": "mysql",
     "operatorsAliases": 0
   }
