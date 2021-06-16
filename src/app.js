@@ -29,7 +29,7 @@ app.use('/', indexRouter);
 app.use('/movies', moviesRouter);
 app.use('/actors', actorsRouter);
 app.use('/dashboard', function(req,res){
-  res.sendFile(path.resolve(__dirname,'dashboard/build', 'index.html'));
+    res.sendFile(path.resolve(__dirname,'dashboard/build', 'index.html'));
 });
 
 /* Api Routes */
