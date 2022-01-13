@@ -5,18 +5,22 @@ module.exports = {
     index: async (req,res)=>{
         const movies = await db.Movies.findAll();
         res.json({
-            meta: {
-                status: 200,
-                totalItems: movies.length,
-                link: '/api/movies'
-            },
+            draw:1,
+            recordsTotal: movies.length,
+            recordsFiltered: movies.length,
+            // meta: {
+            //     status: 200,
+            //     // totalItems: movies.length,
+            //     link: '/api/movies'
+            // },
             data: movies.map(movie=> {
                 return {
                     id: movie.id,
                     title: movie.title,
                     awards: movie.awards,
                     length: movie.length,
-                    link: `/api/movies/${movie.id}`
+                    link: `/api/movies/${movie.id}`,
+                    actions:  `<div class='text-center'><div class='btn-group'  data-movie='${JSON.stringify(movie)}'><button class='btn btn-info btn-sm btnEditar mr-2'>Editar</button><button class='btn btn-danger btn-sm btnBorrar'>Borrar</button></div></div>`
                 }
             })
         });
@@ -35,6 +39,7 @@ module.exports = {
         });
     },
     store: async (req,res) => {
+        // return res.send(req.body);
         const movie = await db.Movies.create(req.body);
         res.json({
             meta: {

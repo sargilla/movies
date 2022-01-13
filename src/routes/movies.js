@@ -3,7 +3,7 @@ var router = express.Router();
 const moviesController = require('../controllers/moviesController');
 
 /* Crud Peliculas */
-router.get('/', moviesController.index);
+router.get('/', moviesController.movies);
 router.get('/recommended', moviesController.recommended);
 router.get('/news', moviesController.news);
 router.get('/create', moviesController.create)

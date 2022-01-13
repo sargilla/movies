@@ -24,6 +24,11 @@ module.exports = {
         db.Movies.findAll()
             .then(movies => res.render('movies/index',{movies}));
     },
+    movies: (req,res)=>{
+        return res.render('movies/movies');
+        // db.Movies.findAll()
+        //     .then(movies => res.render('movies/index',{movies}));
+    },
     show: (req, res) => {
        db.Movies.findByPk(req.params.id,{include:['genre','actors']})
            .then(movie => res.render('movies/show',{movie}));

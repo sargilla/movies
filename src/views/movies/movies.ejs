@@ -1,0 +1,191 @@
+<%- include("../header")  %>
+<p class="d-flex justify-content-between align-items-center">
+    <span>All Movies with dataTables</span> 
+    <a href="/movies/create" class="btn btn-sm btn-primary">Add movie</a>
+</p>
+<hr>
+<div class="container-fluid">
+    <button id="btnCrear" class="btn btn-dark my-2">Crear</button>
+    <div class="row shadow-lg p-3 mb-5">
+
+        <div class="col">
+            <table id="moviesTable" class="table table-striped table-bordered" style="width: 100%;" >
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>title</th>
+                        <th class="text-center">Acciones</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</div>
+<div id="modalCrud" class="modal modal-fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+            </div>
+            <form id="formMovies">    
+                    <div class="modal-body">                
+                        <input id="id" hidden>
+
+                        <label for="title" class="col-form-label">Title:</label>
+                        <input type="text" class="form-control" id="title">
+                    
+                        <label for="awards" class="col-form-label">Awards</label>
+                        <input id="awards" type="number"  class="form-control">
+                    
+                        <label for="length" class="col-form-label">Length</label>
+                        <input id="length" type="number" class="form-control">   
+
+                        <label for="release_date" class="col-form-label">Release Date</label>
+                        <input id="release_date" type="date" class="form-control">        
+
+                        <label for="revenue" class="col-form-label">Revenue:</label>
+                        <input type="text" class="form-control" id="revenue">          
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" id="btnGuardar" class="btn btn-dark">Guardar</button>
+                </div>
+            </form>    
+        </div>
+    </div>
+</div>
+
+<%- include("../scripts")  %>
+
+<script>
+    $( document ).ready(function() {
+        let url = '/api/movies/';
+        let opcion = null;
+        let id, title,movie;
+        // mostrar
+        let movies = $('#moviesTable').DataTable({
+            ajax:{
+                url:url,
+               
+            },
+           columns: [
+                {data:"id"},
+                {data:"title"},
+                {data: "actions"}
+            ],
+            stateSave: true,
+            processing: true,
+            // serverSide: true,
+            language: {
+                search: "Buscar: ",
+                lengthMenu: "_MENU_ items por página",
+                zeroRecords: "No hay items para mostrar",
+                info: "Mostrando la pagina _PAGE_ de _PAGES_",
+                infoEmpty: "No hay items para mostrar",
+                infoFiltered: "(filtrados de _MAX_ items)",
+                emptyTable: "No hay items para mostrar",
+                processing: "Procesando",
+                paginate: {
+                    next: "Siguiente",
+                    previous: "Anterior"
+                }
+            }
+         
+        });
+        
+        //CREAR
+        $("#btnCrear").click(function(e){
+            e.preventDefault();
+            opcion = 'crear';            
+            id = null;
+            $("#formMovies").trigger("reset");
+            $(".modal-header").css( "background-color", "#23272b");
+            $(".modal-header").css( "color", "white" );
+            $(".modal-title").text("Crear Pelicula");
+            $('#modalCrud').modal('show');	    
+        });    
+        //EDITAR        
+        $(document).on("click", ".btnEditar", function(){		            
+            opcion='editar';
+            let data = $(this).parent().data("movie");
+            console.log(data);
+               
+            $("#id").val(data.id);
+            $("#title").val(data.title);
+            $("#awards").val(data.awards);
+            $("#length").val(data.length);
+            $("#release_date").val(data.release_date);
+            $("#revenue").val(data.revenue);
+                     
+            $(".modal-header").css("background-color", "#7303c0");
+            $(".modal-header").css("color", "white" );
+            $(".modal-title").text("Editar Artículo");		
+            $('#modalCrud').modal('show');		   
+        });
+
+     //BORRAR
+        $(document).on("click", ".btnBorrar", function(){
+            fila = $(this);           
+            id = parseInt($(this).closest('tr').find('td:eq(0)').text());            
+            Swal.fire({
+                title: '¿Confirma eliminar el registro?',                
+                showCancelButton: true,
+                confirmButtonText: `Confirmar`,                
+                }).then((result) => {               
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url+id,
+                        method: 'delete',                        
+                        data:  {id:id},    
+                        success: function() {
+                            movies.row(fila.parents('tr')).remove().draw();                  
+                        }
+                    });
+                    Swal.fire('¡Registro Eliminado!', '', 'success')
+                } 
+                })
+        });     
+     //submit para el CREAR y EDITAR
+        $('#formMovies').submit(function(e){                                     
+        e.preventDefault();
+        id = $.trim($('#id').val());    
+        title = $.trim($('#title').val());
+        awards = $.trim($('#awards').val());    
+        length = $.trim($('#length').val());    
+        release_date = $.trim($('#release_date').val());      
+        revenue = $.trim($('#revenue').val());      
+        if(opcion=='crear'){                
+            $.ajax({                    
+                url: url,
+                method: 'post',                                                         
+                contentType: 'application/json',  
+                data:  JSON.stringify({title,awards,length,release_date,revenue}),                       
+                success: function(data) {                       
+                    movies.ajax.reload(null, false);                        
+                }
+            });	
+        }
+        if(opcion=='editar'){
+            console.log("EDITAR");
+            $.ajax({                    
+                url: url+id,
+                method: 'put',                                        
+                contentType: 'application/json',  
+                data:  JSON.stringify({id:id, descripcion:descripcion, precio:precio, stock:stock}),                       
+                success: function(data) {                       
+                    movies.ajax.reload(null, false);                        
+                }
+            });	
+        }        		        
+        $('#modalCrud').modal('hide');											     			
+    });
+    
+    });
+   
+</script>
+
+<%- include("../footer")  %>

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./app"
+    "start": "nodemon -e js,ejs,html ./app"
   },
   "dependencies": {
     "axios": "^0.19.2",
