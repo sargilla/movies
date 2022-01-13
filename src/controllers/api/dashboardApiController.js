@@ -6,7 +6,6 @@ module.exports = {
     widgets: async (req, res) => {
         const products = await db.Product.findAll();
         const users = await db.User.findAll();
-
         let amount = 0
         products.map(product => amount += product.price);
         
